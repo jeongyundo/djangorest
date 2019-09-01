@@ -125,5 +125,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'informationEvent.Userprofile'
+AUTH_USER_MODEL = 'informationEvent.UserProfile'
 #this is how to config usermodel in django
