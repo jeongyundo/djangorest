@@ -1,3 +1,65 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+#기존의 유저모델을 오버라이드 하기위해서 import 함
+from django.contrib.auth.models import BaseUserManager
+
+
+class UserProfileManager(BaseUserManager):
+    """Manager for user profiles"""
+
+    def create_user(self, email, name, password=None):
+        """Create a new user profile"""
+        if not email: 
+            raise ValueError('User must have an email address')
+
+        #normalizing email address
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, name=name)
+
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_superuser(self, email, name, password):
+        """Create and save a new superuser with given details"""
+        user = self.create_user(email, name, password)
+        #self는 위에서 이미 받기때문에 함수안에 넣지 않아도된다.
+
+        user.is_superuser = True
+        user.is_staff = True
+        user.save(using=self._db)
+
+        return user
+
+
 
 # Create your models here.
+class UserProfile(AbstractBaseUser, PermissionsMixin):
+    """Database model for users in the system"""
+    email = models.EmailField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = UserProfileManager()
+    #추후에 만들 예정
+
+    USERNAME_FIELD = 'email'
+    #username을 email로 지정해두었다.
+    REQUIRED_FIELDS = ['name']
+
+    def get_full_name(self):
+        """Retrieve full name of user"""
+        return self.name
+
+    def get_short_name(self):
+        """Retrieve short name of user"""
+        return self.name
+        
+    def __str___(self):
+        """Return string representation of our user"""
+        return self.email
+    #확인용
