@@ -1,8 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
+
+from informationEvent import serializers
+
 
 class HelloApiView(APIView):
     """Test API View"""
+    serializer_class = serializers.HelloSerializer
 
     def get(self, request, format=None):
         """Returns a list of APIView features"""
@@ -14,3 +19,15 @@ class HelloApiView(APIView):
         ]
 
         return Response({'message': 'Hello!', 'an_apiview':an_apiview})
+
+    def post(self, request):
+        """Create a hello message with our name"""
+        serializer = self.serializer_class(data=request.data)
+        #받아온 데이터를 객체형태로 serialize를 시켜준다.
+        if serializer.is_valid():
+            name = serializer.validated_data.get('name')
+            message = f'Hello {name}'
+            #f를 이용함으로써 {}를 사용할 수 있다. 그리고 이는 메세지를 제공한다
+            return Response({'message': message})
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
