@@ -35,10 +35,12 @@ class HelloApiView(APIView):
     def put(self, request, pk=None):
         """Handle updating an object"""
         return Response({'method':'PUT'})
+    #풋의 경우 모든 요소들을 업데이트 해야한다.
 
     def patch(self, request, pk=None):
         """Handle a partial update of an object"""
         return Reponse({'method':'PATCH'})
+    #패치의경우 특정 요소들만 업데이트 할 수 있다.
 
     def delete(self, request, pk=None):
         """Delete an object"""
