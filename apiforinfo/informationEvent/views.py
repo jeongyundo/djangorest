@@ -1,10 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import viewsets
 
 from informationEvent import serializers
 
 
+#apiview를 이용
 class HelloApiView(APIView):
     """Test API View"""
     serializer_class = serializers.HelloSerializer
@@ -45,3 +47,18 @@ class HelloApiView(APIView):
     def delete(self, request, pk=None):
         """Delete an object"""
         return Response({'method':'DELETE'})
+
+#viewset을 이용
+class HelloViewSet(viewsets.ViewSet):
+    """Test API ViewSet"""
+
+    def list(self, request):
+        """Return a hello message"""
+
+        a_viewset = [
+            'Uses actions (list, create, retrieve, update, partial_update',
+            'Automatically maps to URLs using Routhers',
+            'Provides more functionality with less code' 
+        ]
+
+        return Response({'message':'Hello!', 'a_viewset': a_viewset})
