@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import filters
 
 from informationEvent import serializers
 from informationEvent import models
@@ -99,5 +100,12 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     """Handle creating and updating profiles"""
     serializer_class = serializers.UserProfileSerializer
     queryset = models.UserProfile.objects.all()
+    #add viewset
     authentication_classes = (TokenAuthentication, )
     permission_classes = (permissions.UpdateOwnProfile,)
+    #add authentication and permissions
+
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('name', 'email',)
+    #add search profiles feature
+    #튜플이기에 ,를 붙혀준다(python문법)
