@@ -4,6 +4,8 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import filters
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.settings import api_settings
 
 from informationEvent import serializers
 from informationEvent import models
@@ -109,3 +111,8 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     search_fields = ('name', 'email',)
     #add search profiles feature
     #튜플이기에 ,를 붙혀준다(python문법)
+
+class UserLoginApiView(ObtainAuthToken):
+    """Handle creating user authentication token"""
+    renderer_class = api_settings.DEFAULT_RENDERER_CLASSES
+    
