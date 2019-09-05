@@ -114,5 +114,16 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
 class UserLoginApiView(ObtainAuthToken):
     """Handle creating user authentication token"""
-    renderer_class = api_settings.DEFAULT_RENDERER_CLASSES
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
     
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+    """Handles creating, reading and updating profile feed items"""
+    authentication_classess = (TokenAuthentication, )
+    #이 클래스를 통해서 토크나이징을 함
+    serializer_class = serializers.ProfileFeedItemSerializer
+    queryset = models.ProfileFeedItem.objects.all()
+    #쿼리문 생성
+
+    def perform_create(self, serializer):
+        """sets the user profiles to the logged in user"""
+        serializer.save(user_profile=self.request.user)
