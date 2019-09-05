@@ -5,3 +5,4 @@ from django.contrib import admin
 from informationEvent import models
 
 admin.site.register(models.UserProfile)
+admin.site.register(models.ProfileFeedItem)
