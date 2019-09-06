@@ -10,3 +10,13 @@ class UpdateOwnProfile(permissions.BasePermission):
         #자기 정보에 대해서 권한만 갖게 하기 위한 방법
         
         return obj.id == request.user.id
+
+class UpdateOwnStatus(permissions.BasePermission):
+    """Allow user to update their own status"""
+
+    def has_object_permission(self, request, view, obj):
+        """check the user is trying to update their own status"""
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.id == request.user.id
